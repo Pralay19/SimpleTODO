@@ -1,6 +1,6 @@
 import { useState } from "react"
-import "./styles.css"
-/* tslint:disable:no-unused-variable */
+// import "./styles.css"
+
 
 export default function App(){
   const [newItem,setNewItem]=useState("");//Define state for all the components for which you want the code to re-render
@@ -20,17 +20,31 @@ function handleSubmit(e){
     })
     setNewItem("");
   }
-function handleDeleteItem(givenid){
-  // e.preventDefault;
-  setTodos((currentTodos)=>{
-    const filteredTodos=currentTodos.filter(todo=>todo.id!=givenid);
-    return [filteredTodos];
+// function handleDeleteItem(givenid){
+//   // e.preventDefault;
+//   setTodos((currentTodos)=>{
+//     const filteredTodos=currentTodos.filter(todo=>todo.id!=givenid);
+//     return [filteredTodos];
+//   })
+// }
+function toggleTodo(id,completed){
+  console.log(id,completed)
+  setTodos(currentTodos =>{
+    return currentTodos.map(todo =>{
+      if(todo.id==id){
+        todo.completed=completed
+        return todo
+      }
+      return todo
+    })
   })
 }
-function toggleTodo(givenid,completed){
-  
+function handleDelete(id){
+  console.log(id);
+  setTodos(currentTodos=>{
+    return currentTodos.filter(todo=>todo.id!=id)
+  })
 }
-
 console.log(todos);
   return(
     <>
@@ -48,11 +62,12 @@ console.log(todos);
         {todos.map(todo=>{
           return (
             <li key={todo.id}>
+              <input type="checkbox" checked={todo.completed} onClick={(e) => {toggleTodo(todo.id,e.target.checked)}}/>
           <label htmlFor="">
-            <input type="checkbox" onChange={e =>{toggleTodo(todo.id,e.target.checked)}} checked={todo.completed}/>
+            
             {todo.title}
           </label>
-          <button onClick={e=> handleDeleteItem(todo.id)} className="btn btn-danger">Delete</button>
+          <button  className="btn btn-danger" onClick={(e)=>{handleDelete(todo.id)}}>Delete</button>
         </li>
           )
         })}
